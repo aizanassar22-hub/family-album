@@ -1,179 +1,178 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ألبوم ذكريات الأحباب</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-javascript@2"></script>
-    <!-- Google Fonts Arabic -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Tajawal', sans-serif; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ألبوم ذكريات الأحباب</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Tajawal', sans-serif; }
+  </style>
 </head>
 <body class="bg-amber-50/40 min-h-screen text-slate-800 pb-12">
 
-    <!-- Header Section -->
-    <header class="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 text-white shadow-lg">
-        <div class="max-w-4xl mx-auto px-4 py-6 text-center">
-            <h1 class="text-3xl md:text-4xl font-extrabold mb-2">ألبوم ذكريات الأحباب 📸✨</h1>
-            <p class="text-amber-100 text-sm md:text-base">ملتقى الصور والذكريات الجميلة للعائلة والأحباب</p>
+  <header class="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 text-white shadow-lg mb-8">
+    <div class="max-w-4xl mx-auto px-4 py-6 text-center">
+      <h1 class="text-3xl md:text-4xl font-extrabold mb-2">ألبوم ذكريات الأحباب 📸✨</h1>
+      <p class="text-amber-100 text-sm md:text-base">ملتقى الصور والذكريات الجميلة للعائلة والأحباب</p>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4">
+    <!-- Password Lock View -->
+    <div id="auth-card" class="bg-white rounded-2xl shadow-md border border-amber-100 p-6 md:p-8 max-w-md mx-auto text-center">
+      <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+        🔒
+      </div>
+      <h2 class="text-xl font-bold mb-2">رمز الدخول العائلي</h2>
+      <p class="text-slate-500 text-sm mb-6">يرجى إدخال رمز الدخول الخاص بالعائلة لعرض وإضافة الذكريات</p>
+      
+      <form id="login-form" onsubmit="checkPasscode(event)" class="space-y-4">
+        <input type="password" id="passcode-input" placeholder="أدخل الرمز السري هنا" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-center text-lg">
+        <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded-xl shadow transition duration-200">
+          دخول الألبوم
+        </button>
+      </form>
+      <p id="auth-error" class="text-red-500 text-sm mt-3 hidden">الرمز السري غير صحيح، يرجى المحاولة مرة أخرى.</p>
+    </div>
+
+    <!-- Main Content (Hidden by default) -->
+    <div id="app-content" class="hidden space-y-8">
+      <!-- Upload Box -->
+      <div class="bg-white rounded-2xl shadow-md border border-amber-100 p-6">
+        <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-amber-800">
+          <span>➕</span> إضافة ذكرى جديدة
+        </h2>
+        <form id="upload-form" onsubmit="handleUpload(event)" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">اختر الصورة</label>
+            <input type="file" id="photo-input" accept="image/*" required class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">وصف الذكرى / تعليق</label>
+            <input type="text" id="caption-input" placeholder="اكتب تعليقاً بسيطاً عن هذه الصورة..." class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
+          </div>
+          <button type="submit" id="upload-btn" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl shadow transition duration-200 flex items-center justify-center gap-2">
+            <span>رفع الصورة إلى الألبوم</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div>
+        <h2 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+          <span>🖼️</span> معرض الذكريات
+        </h2>
+        <div id="photos-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <!-- Photos will be inserted here -->
         </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-4xl mx-auto px-4 mt-8">
-
-        <!-- Password Lock View -->
-        <div id="auth-card" class="bg-white rounded-2xl shadow-md border border-amber-100 p-6 md:p-8 max-w-md mx-auto text-center">
-            <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                🔒
-            </div>
-            <h2 class="text-xl font-bold mb-2">رمز الدخول العائلي</h2>
-            <p class="text-slate-500 text-sm mb-6">يرجى إدخال رمز الدخول الخاص بالعائلة لعرض وإضافة الذكريات</p>
-            
-            <form id="login-form" onsubmit="checkPasscode(event)" class="space-y-4">
-                <input type="password" id="passcode-input" placeholder="أدخل الرمز السرّي هنا" required
-                       class="w-full px-4 py-3 border border-slate-300 rounded-xl text-center text-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
-                <button type="submit" 
-                        class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-colors shadow">
-                    دخول الألبوم
-                </button>
-            </form>
-            <p id="error-msg" class="text-red-500 text-sm mt-3 hidden">الرمز غير صحيح، يرجى المحاولة مرة أخرى</p>
+        <div id="empty-state" class="text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300 hidden">
+          <p class="text-slate-500">لا توجد صور مضافة حتى الآن. كن أول من يضيف ذكرى!</p>
         </div>
+      </div>
+    </div>
+  </main>
 
-        <!-- Album Content View -->
-        <div id="album-content" class="hidden space-y-8">
+  <script>
+    // Configuration
+    const FAMILY_PASSCODE = "1234"; // رمز الدخول العائلي
+    const SUPABASE_URL = window.env?.NEXT_PUBLIC_SUPABASE_URL || "https://cckl130sa-abu-ahmad.supabase.co";
+    const SUPABASE_ANON_KEY = window.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
-            <!-- Control & Upload Bar -->
-            <div class="bg-white rounded-2xl shadow-sm border border-amber-100 p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-800">معرض الذكريات</h2>
-                    <p class="text-slate-500 text-sm">استعرض صور العائلة أو أضف ذكرى جديدة</p>
-                </div>
-                
-                <div class="w-full md:w-auto">
-                    <label for="file-upload" class="cursor-pointer bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-3 rounded-xl flex items-center justify-center gap-2 shadow transition-colors">
-                        <span>➕ إضافة صورة جديدة</span>
-                    </label>
-                    <input id="file-upload" type="file" accept="image/*" class="hidden" onchange="uploadPhoto(event)">
-                </div>
-            </div>
+    let supabaseClient = null;
+    if (typeof supabase !== 'undefined' && SUPABASE_URL && SUPABASE_ANON_KEY) {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
 
-            <!-- Upload Status -->
-            <div id="upload-status" class="hidden bg-amber-100 text-amber-800 px-4 py-3 rounded-xl text-center font-medium">
-                جاري رفع الصورة إلى الألبوم... ⏳
-            </div>
+    function checkPasscode(e) {
+      e.preventDefault();
+      const input = document.getElementById('passcode-input').value;
+      if (input === FAMILY_PASSCODE) {
+        document.getElementById('auth-card').classList.add('hidden');
+        document.getElementById('app-content').classList.remove('hidden');
+        loadPhotos();
+      } else {
+        document.getElementById('auth-error').classList.remove('hidden');
+      }
+    }
 
-            <!-- Photo Gallery Grid -->
-            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+    async function loadPhotos() {
+      const grid = document.getElementById('photos-grid');
+      const emptyState = document.getElementById('empty-state');
+      
+      if (!supabaseClient) {
+        emptyState.classList.remove('hidden');
+        return;
+      }
 
-            <!-- Empty State -->
-            <div id="empty-state" class="hidden text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300">
-                <div class="text-4xl mb-3">🖼️</div>
-                <h3 class="text-lg font-bold text-slate-700 mb-1">لا توجد صور حتى الآن</h3>
-                <p class="text-slate-500 text-sm">كن أول من يضيف ذكرى جميلة لألبوم العائلة!</p>
-            </div>
+      try {
+        const { data, error } = await supabaseClient.from('photos').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
 
-        </div>
-
-    </main>
-
-    <script>
-        const SUPABASE_URL = 'https://your-supabase-url.supabase.co';
-        const SUPABASE_ANON_KEY = 'your-anon-key';
-        const BUCKET_NAME = 'memoreis_photos';
-        const FAMILY_PASSCODE = 'Ahbab2026';
-
-        function checkPasscode(e) {
-            e.preventDefault();
-            const input = document.getElementById('passcode-input').value.trim();
-            if (input === FAMILY_PASSCODE) {
-                document.getElementById('auth-card').classList.add('hidden');
-                document.getElementById('album-content').classList.remove('hidden');
-                loadPhotos();
-            } else {
-                document.getElementById('error-msg').classList.remove('hidden');
-            }
+        grid.innerHTML = '';
+        if (!data || data.length === 0) {
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+          data.forEach(photo => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100';
+            card.innerHTML = `
+              <img src="${photo.url}" class="w-full h-48 object-cover" alt="ذكرى">
+              <div class="p-4">
+                <p class="text-slate-700 text-sm font-medium">${photo.caption || 'بدون تعليق'}</p>
+                <span class="text-xs text-slate-400 mt-2 block">${new Date(photo.created_at).toLocaleDateString('ar-SA')}</span>
+              </div>
+            `;
+            grid.appendChild(card);
+          });
         }
+      } catch (err) {
+        console.error("Error loading photos:", err);
+      }
+    }
 
-        let supabaseClient = null;
-        if (SUPABASE_URL !== 'https://your-supabase-url.supabase.co') {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
+    async function handleUpload(e) {
+      e.preventDefault();
+      const btn = document.getElementById('upload-btn');
+      const fileInput = document.getElementById('photo-input');
+      const captionInput = document.getElementById('caption-input');
+      const file = fileInput.files[0];
 
-        async function loadPhotos() {
-            const grid = document.getElementById('gallery-grid');
-            const emptyState = document.getElementById('empty-state');
-            grid.innerHTML = '';
+      if (!file) return;
 
-            if (!supabaseClient) {
-                emptyState.classList.remove('hidden');
-                return;
-            }
+      if (!supabaseClient) {
+        alert("يرجى التأكد من إعدادات الاتصال بـ Supabase.");
+        return;
+      }
 
-            try {
-                const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('', {
-                    limit: 100,
-                    sortBy: { column: 'created_at', order: 'desc' }
-                });
+      btn.disabled = true;
+      btn.innerText = "جاري الرفع...";
 
-                if (error || !data || data.length === 0) {
-                    emptyState.classList.remove('hidden');
-                    return;
-                }
+      try {
+        const fileName = `${Date.now()}_${file.name}`;
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage.from('family-photos').upload(fileName, file);
+        if (uploadError) throw uploadError;
 
-                emptyState.classList.add('hidden');
-                data.forEach(item => {
-                    const { data: publicUrlData } = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(item.name);
-                    
-                    const card = document.createElement('div');
-                    card.className = "bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-md transition-shadow";
-                    card.innerHTML = `
-                        <div class="aspect-square overflow-hidden bg-slate-100">
-                            <img src="${publicUrlData.publicUrl}" alt="ذكريات العائلة" class="w-full h-full object-cover">
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            } catch (err) {
-                console.error(err);
-                emptyState.classList.remove('hidden');
-            }
-        }
+        const { data: publicUrlData } = supabaseClient.storage.from('family-photos').getPublicUrl(fileName);
+        const photoUrl = publicUrlData.publicUrl;
 
-        async function uploadPhoto(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        const { error: dbError } = await supabaseClient.from('photos').insert([{ url: photoUrl, caption: captionInput.value }]);
+        if (dbError) throw dbError;
 
-            const status = document.getElementById('upload-status');
-            status.classList.remove('hidden');
-
-            if (!supabaseClient) {
-                alert('يرجى ربط مفاتيح Supabase لإتمام عملية الرفع الحقيقية');
-                status.classList.add('hidden');
-                return;
-            }
-
-            try {
-                const fileName = `${Date.now()}_${file.name}`;
-                const { error } = await supabaseClient.storage.from(BUCKET_NAME).upload(fileName, file);
-
-                if (error) throw error;
-
-                alert('تمت إضافة الصورة إلى الألبوم بنجاح! 🎉');
-                loadPhotos();
-            } catch (err) {
-                alert('حدث خطأ أثناء الرفع: ' + err.message);
-            } finally {
-                status.classList.add('hidden');
-                event.target.value = '';
-            }
-        }
-    </script>
+        alert("تمت إضافة الذكرى بنجاح! 🎉");
+        fileInput.value = '';
+        captionInput.value = '';
+        loadPhotos();
+      } catch (err) {
+        alert("حدث خطأ أثناء الرفع: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "رفع الصورة إلى الألبوم";
+      }
+    }
+  </script>
 </body>
 </html>
