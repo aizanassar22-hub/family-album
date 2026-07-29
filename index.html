@@ -78,12 +78,12 @@
   <script>
     // Configuration
     const FAMILY_PASSCODE = "Ahbab2026"; 
-    const SUPABASE_URL = "https://cckl130sa-abu-ahmad.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNja2wxMzBzYS1hYnUtYWhtYWQiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc2NzE1ODcxOCwiZXhwIjoyMDgyNzM0NzE4fQ.aK_3o_pX2P0Q_1q9L8m2O3N4P5Q6R7S8T9U0V1W2X3Y";
+    const SUPABASE_URL = "https://qnxmvshohhspxwdejlo.supabase.co";
+    const SUPABASE_KEY = "Sb_publishable_4Nsh9jSzcwzEjlSiPkf3tA_uPwMu7SV";
 
     let supabaseClient = null;
     if (typeof supabase !== 'undefined') {
-      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
 
     function checkPasscode(e) {
