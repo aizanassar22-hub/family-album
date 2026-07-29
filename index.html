@@ -77,12 +77,12 @@
 
   <script>
     // Configuration
-    const FAMILY_PASSCODE = "1234"; // رمز الدخول العائلي
-    const SUPABASE_URL = window.env?.NEXT_PUBLIC_SUPABASE_URL || "https://cckl130sa-abu-ahmad.supabase.co";
-    const SUPABASE_ANON_KEY = window.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+    const FAMILY_PASSCODE = "Ahbab2026"; 
+    const SUPABASE_URL = "https://cckl130sa-abu-ahmad.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNja2wxMzBzYS1hYnUtYWhtYWQiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc2NzE1ODcxOCwiZXhwIjoyMDgyNzM0NzE4fQ.aK_3o_pX2P0Q_1q9L8m2O3N4P5Q6R7S8T9U0V1W2X3Y";
 
     let supabaseClient = null;
-    if (typeof supabase !== 'undefined' && SUPABASE_URL && SUPABASE_ANON_KEY) {
+    if (typeof supabase !== 'undefined') {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
@@ -102,10 +102,7 @@
       const grid = document.getElementById('photos-grid');
       const emptyState = document.getElementById('empty-state');
       
-      if (!supabaseClient) {
-        emptyState.classList.remove('hidden');
-        return;
-      }
+      if (!supabaseClient) return;
 
       try {
         const { data, error } = await supabaseClient.from('photos').select('*').order('created_at', { ascending: false });
@@ -143,11 +140,6 @@
 
       if (!file) return;
 
-      if (!supabaseClient) {
-        alert("يرجى التأكد من إعدادات الاتصال بـ Supabase.");
-        return;
-      }
-
       btn.disabled = true;
       btn.innerText = "جاري الرفع...";
 
@@ -167,7 +159,7 @@
         captionInput.value = '';
         loadPhotos();
       } catch (err) {
-        alert("حدث خطأ أثناء الرفع: " + err.message);
+        alert("تنبيه: " + err.message);
       } finally {
         btn.disabled = false;
         btn.innerText = "رفع الصورة إلى الألبوم";
